@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Food Item List{% endblock %}
+
+{% block content %}
+<body>
+    <h1>Food Item List</h1>
+    <ul>
+        {% for food_item in food_items %}
+            <li>{{ forloop.counter }}. {{ food_item.name }} - {{ food_item.quantity }} {{ food_item.get_unit_display }}
+                <a href="{% url 'edit_food_item' pk=food_item.pk %}">Edit</a>
+                <a href="{% url 'delete_food_item' pk=food_item.pk %}">Delete</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}categories List{% endblock %}
+
+{% block content %}
+    <h1>Categories List</h1>
+    <ul>
+        {% for category in categories %}
+            <li>
+                {{ category.name }}
+                <a href="{% url 'delete_category' pk=category.pk %}">Delete</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
