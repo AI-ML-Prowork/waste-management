@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 import os
+import io
 import base64
 import barcode
 from barcode.writer import ImageWriter
