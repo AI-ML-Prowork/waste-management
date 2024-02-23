@@ -2,7 +2,7 @@ from django.contrib import admin
 from food_management.models import FoodCategory
 
 class FoodCategoryAdmin(admin.ModelAdmin):
-    list_display = ['name']
+    list_display = ['name', 'pre_expiry_days']
 
 admin.site.register(FoodCategory, FoodCategoryAdmin)
 

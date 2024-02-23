@@ -19,8 +19,8 @@ class FoodItemForm(forms.ModelForm):
 
 
 class NewCategoryForm(forms.ModelForm):
+    pre_expiry_days = forms.IntegerField(label='Pre-Expiry Days', initial=0) 
+
     class Meta:
         model = FoodCategory
-        fields = ['name']
-
-
+        fields = ['name', 'pre_expiry_days']

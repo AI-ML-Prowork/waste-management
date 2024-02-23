@@ -12,6 +12,7 @@ import base64
 import barcode
 from barcode.writer import ImageWriter
 from io import BytesIO
+from django.utils import timezone
 
 
 
@@ -26,9 +27,25 @@ def dashboard(request):
     total_users = User.objects.count()
     total_food_items = FoodItem.objects.count()
     total_categories = FoodCategory.objects.count()
-    return render(request, 'food_management/dashboard.html', {'total_users': total_users, 'total_food_items': total_food_items, 'total_categories': total_categories})
 
-    
+    # Fetch approaching expiry items based on custom pre-expiry days for each category
+    approaching_expiry_items = []
+    for category in FoodCategory.objects.all():
+        pre_expiry_days = category.pre_expiry_days
+        approaching_expiry_items.extend(
+            FoodItem.objects.filter(
+                category=category,
+                expiry_date__lte=timezone.now() + timezone.timedelta(days=pre_expiry_days)
+            )
+        )
+
+    return render(request, 'food_management/dashboard.html', {
+        'total_users': total_users,
+        'total_food_items': total_food_items,
+        'total_categories': total_categories,
+        'approaching_expiry_items': approaching_expiry_items
+    })
+
 
 @login_required(login_url='user_login/')
 def add_food_item(request):
@@ -111,7 +128,8 @@ def add_category(request):
 @login_required(login_url='user_login/')
 def category_list(request):
     categories = FoodCategory.objects.all()
-    return render(request, 'food_management/category_list.html', {'categories': categories})
+    pre_expiry_days = FoodCategory.objects.all()
+    return render(request, 'food_management/category_list.html', {'categories': categories, 'pre_expiry_days': pre_expiry_days})
 
 
 

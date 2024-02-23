@@ -12,10 +12,7 @@ urlpatterns = [
     path('add_food_item/', add_food_item, name='add_food_item'),
     path('food_item_list/', food_item_list, name='food_item_list'),
     path('edit_food_item/<int:pk>/', edit_food_item, name='edit_food_item'),
-    path('delete_food_item/<int:pk>/', delete_food_item, name='delete_food_item'),
-
-    
-
+    path('delete_food_item/<int:pk>/', delete_food_item, name='delete_food_item'),\
 
     path('user_login/', user_login, name='user_login'),
     path('user_signup/', user_signup, name='user_signup'),

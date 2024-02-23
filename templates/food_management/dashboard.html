@@ -2,7 +2,6 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<div class="dashboard">
     <div class="card" style="background-color: #ff9999;">
         <h2>Total Users</h2>
         <p>{{ total_users }}</p>
@@ -16,4 +15,20 @@
         <p>{{ total_categories }}</p>
     </div>
 </div>
+
+
+<div class="dashboard">
+    <div class="notification">
+        {% if approaching_expiry_items %}
+            <p>Your product is about to expire. Please deposit it to the local food bank.</p>
+            <ul>
+                {% for item in approaching_expiry_items %}
+                    <li>{{ item.name }} - Expiry Date: {{ item.expiry_date }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No items approaching expiry date.</p>
+        {% endif %}
+    </div>
 {% endblock %}
+

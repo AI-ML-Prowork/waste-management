@@ -1,8 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
+
 
 class FoodCategory(models.Model):
     name = models.CharField(max_length=100)
+    pre_expiry_days = models.PositiveIntegerField(default=0)
+
 
     def __str__(self):
         return self.name
@@ -17,10 +21,7 @@ class FoodItem(models.Model):
         ('litres', 'litres'),
         ('units', 'units'),
         ('other', 'other'),
-
-    ]
-
-    
+    ]    
     category = models.ForeignKey(FoodCategory, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     quantity = models.DecimalField(max_digits=10, decimal_places=2)
@@ -29,6 +30,14 @@ class FoodItem(models.Model):
     added_by = models.ForeignKey(User, on_delete=models.CASCADE)
     barcode = models.CharField(max_length=100, blank=True, null=True)
 
+    def calculate_expiry_date(self):
+        pre_expiry_days = self.category.pre_expiry_days
+        return self.expiry_date - timezone.timedelta(days=pre_expiry_days)
+
+    def calculate_expiry_date(self):
+        pre_expiry_days = self.category.pre_expiry_days
+        return self.expiry_date - timezone.timedelta(days=pre_expiry_days)
+    
     def __str__(self):
         return self.name
 
