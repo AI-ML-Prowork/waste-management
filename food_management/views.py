@@ -28,7 +28,7 @@ def add_food_item(request):
         if form.is_valid():
             category = form.cleaned_data.get('category')
             new_category = form.cleaned_data.get('new_category')
-
+            
             if not category and new_category:
                 category = FoodCategory.objects.create(name=new_category)            
             food_item = form.save(commit=False)
@@ -37,9 +37,7 @@ def add_food_item(request):
             food_item.save()
             barcode_data = f"{food_item.name} {food_item.category} {food_item.expiry_date}"
             barcode_image = generate_barcode_image(barcode_data)
-
-            return render(request, 'food_management/add_food_item.html', {'form': form, 'barcode_image': barcode_image})       
-            
+            return render(request, 'food_management/add_food_item.html', {'form': form, 'barcode_image': barcode_image})                   
     else:
         form = FoodItemForm()
     return render(request, 'food_management/add_food_item.html', {'form': form})
@@ -49,16 +47,12 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.files.base import ContentFile
 
 def generate_barcode_image(barcode_data):
-    # Generate barcode image using python-barcode library
     code128 = barcode.get_barcode_class('code128')
     code = code128(barcode_data, writer=ImageWriter())
     buffer = io.BytesIO()
     code.write(buffer)
-    # Get the image data as bytes
     image_data = buffer.getvalue()
-    # Encode the image data as base64
     base64_image = base64.b64encode(image_data)
-    # Return the base64-encoded image data
     return base64_image.decode('utf-8')
 
 @login_required(login_url='user_login/')
@@ -138,7 +132,7 @@ def user_signup(request):
             messages.error(request, 'Passwords do not match')
             return redirect('user_signup')
         
-        # Create a new user
+
         user = User.objects.create_user(
             username=email,
             first_name=first_name,
@@ -147,7 +141,7 @@ def user_signup(request):
             password=password,
         )
 
-        # login(request, user)
+
         messages.success(request, 'Account created successfully')
         return redirect('user_login') 
     
@@ -180,3 +174,8 @@ def user_logout(request):
 
 
 
+def dashboard(request):
+    total_users = User.objects.count()
+    total_food_items = FoodItem.objects.count()
+    total_categories = FoodCategory.objects.count()
+    return render(request, 'food_management/dashboard.html', {'total_users': total_users, 'total_food_items': total_food_items, 'total_categories': total_categories})

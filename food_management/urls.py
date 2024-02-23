@@ -12,6 +12,8 @@ urlpatterns = [
     path('edit_food_item/<int:pk>/', edit_food_item, name='edit_food_item'),
     path('delete_food_item/<int:pk>/', delete_food_item, name='delete_food_item'),
 
+    path('dashboard/', dashboard, name='dashboard'),
+
 
     path('user_login/', user_login, name='user_login'),
     path('user_signup/', user_signup, name='user_signup'),
