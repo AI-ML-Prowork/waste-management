@@ -1,3 +1,4 @@
 Django
 python-barcode
 django-background-tasks
+barcode
