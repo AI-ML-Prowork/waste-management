@@ -2,7 +2,8 @@ from django.urls import path
 from . views import *
 
 urlpatterns = [
-    path('', base, name='base'),
+    path('base', base, name='base'),
+    path('', dashboard, name='dashboard'),
     path('add_category/', add_category, name='add_category'),
     path('category_list/', category_list, name='category_list'),
     path('delete_category/<int:pk>/', delete_category, name='delete_category'),
@@ -12,7 +13,7 @@ urlpatterns = [
     path('edit_food_item/<int:pk>/', edit_food_item, name='edit_food_item'),
     path('delete_food_item/<int:pk>/', delete_food_item, name='delete_food_item'),
 
-    path('dashboard/', dashboard, name='dashboard'),
+    
 
 
     path('user_login/', user_login, name='user_login'),

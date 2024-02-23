@@ -28,7 +28,7 @@ def add_food_item(request):
         if form.is_valid():
             category = form.cleaned_data.get('category')
             new_category = form.cleaned_data.get('new_category')
-            
+
             if not category and new_category:
                 category = FoodCategory.objects.create(name=new_category)            
             food_item = form.save(commit=False)
@@ -170,7 +170,7 @@ def user_login(request):
 def user_logout(request):
     auth_logout(request)
     messages.success(request, 'Logged out successfully')
-    return redirect('/')
+    return redirect('user_login')
 
 
 
