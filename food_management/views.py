@@ -28,7 +28,6 @@ def dashboard(request):
     total_food_items = FoodItem.objects.count()
     total_categories = FoodCategory.objects.count()
 
-    # Fetch approaching expiry items based on custom pre-expiry days for each category
     approaching_expiry_items = []
     for category in FoodCategory.objects.all():
         pre_expiry_days = category.pre_expiry_days
