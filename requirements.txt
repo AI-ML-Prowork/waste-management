@@ -1,4 +1,6 @@
+barcode_generator
 Django
-python-barcode
-django-background-tasks
 barcode
+io
+base64
+
