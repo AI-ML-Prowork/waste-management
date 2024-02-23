@@ -7,6 +7,8 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 import os
+import io
+import base64
 
 
 
@@ -14,6 +16,9 @@ import os
 def base(request):
     return render(request, 'base.html')
 
+import barcode
+from barcode.writer import ImageWriter
+from io import BytesIO
 
 @login_required(login_url='user_login/')
 def add_food_item(request):
@@ -29,12 +34,35 @@ def add_food_item(request):
             food_item.added_by = request.user
             food_item.category = category
             food_item.save()
-            return redirect('add_food_item')
+
+            # Generate the barcode
+            barcode_data = f"{food_item.name} {food_item.category} {food_item.expiry_date}"
+            barcode_image = generate_barcode_image(barcode_data)
+
+            # Pass the barcode image data to the template
+            return render(request, 'food_management/add_food_item.html', {'form': form, 'barcode_image': barcode_image})
+        
+            
     else:
         form = FoodItemForm()
     return render(request, 'food_management/add_food_item.html', {'form': form})
 
+from django.conf import settings
+from django.contrib.staticfiles.storage import staticfiles_storage
+from django.core.files.base import ContentFile
 
+def generate_barcode_image(barcode_data):
+    # Generate barcode image using python-barcode library
+    code128 = barcode.get_barcode_class('code128')
+    code = code128(barcode_data, writer=ImageWriter())
+    buffer = io.BytesIO()
+    code.write(buffer)
+    # Get the image data as bytes
+    image_data = buffer.getvalue()
+    # Encode the image data as base64
+    base64_image = base64.b64encode(image_data)
+    # Return the base64-encoded image data
+    return base64_image.decode('utf-8')
 
 @login_required(login_url='user_login/')
 def food_item_list(request):
@@ -152,3 +180,6 @@ def user_logout(request):
     auth_logout(request)
     messages.success(request, 'Logged out successfully')
     return redirect('/')
+
+
+

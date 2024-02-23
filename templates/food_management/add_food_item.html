@@ -8,8 +8,27 @@
         {{ form.as_p }}
         <button type="submit">Submit</button>
     </form>
+
     
     <p>Didn't find your category? <a href="{% url 'add_category' %}">Click to Add</a></p>
     <p>Want to delete your category? <a href="{% url 'category_list' %}">Click to Delete</a></p>
+
+    {% if barcode_image %}
+        <!-- Display the barcode image using base64 data -->
+        <img src="data:image/png;base64,{{ barcode_image }}" alt="Barcode Image">
+    {% endif %}
+
+    <script>
+        // Function to trigger the download of the barcode image
+        document.getElementById('downloadBarcodeBtn').addEventListener('click', function() {
+            var barcodeImage = document.getElementById('barcodeImage');
+            var link = document.createElement('a');
+            link.href = barcodeImage.src;
+            link.download = 'barcode.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    </script>
 
 {% endblock %}
