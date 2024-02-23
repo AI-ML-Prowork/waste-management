@@ -22,6 +22,15 @@ def base(request):
 
 
 @login_required(login_url='user_login/')
+def dashboard(request):
+    total_users = User.objects.count()
+    total_food_items = FoodItem.objects.count()
+    total_categories = FoodCategory.objects.count()
+    return render(request, 'food_management/dashboard.html', {'total_users': total_users, 'total_food_items': total_food_items, 'total_categories': total_categories})
+
+    
+
+@login_required(login_url='user_login/')
 def add_food_item(request):
     if request.method == 'POST':
         form = FoodItemForm(request.POST)
@@ -173,9 +182,3 @@ def user_logout(request):
     return redirect('user_login')
 
 
-
-def dashboard(request):
-    total_users = User.objects.count()
-    total_food_items = FoodItem.objects.count()
-    total_categories = FoodCategory.objects.count()
-    return render(request, 'food_management/dashboard.html', {'total_users': total_users, 'total_food_items': total_food_items, 'total_categories': total_categories})
