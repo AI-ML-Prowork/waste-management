@@ -2,11 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import FoodItem, FoodCategory
 from .forms import FoodItemForm,NewCategoryForm
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate
 from django.contrib.auth import logout as auth_logout
-from django.contrib.auth import login
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.contrib.auth import login, authenticate
 import os
 
 
@@ -67,10 +66,6 @@ def delete_food_item(request, pk):
     return render(request, 'food_management/delete_food_item_confirm.html', {'food_item': food_item})
 
 
-
-
-
-
 @login_required(login_url='user_login/')
 def add_category(request):
     if request.method == 'POST':
@@ -105,11 +100,9 @@ def delete_category(request, pk):
 
 
 def user_signup(request):
-
     if request.user.is_authenticated:
         return redirect('/')
     if request.method == 'POST':
-
         first_name = request.POST.get('First_Name')
         last_name = request.POST.get('Last_Name')
         email = request.POST.get('Email')
@@ -118,7 +111,7 @@ def user_signup(request):
 
         if password != confirm_password:
             messages.error(request, 'Passwords do not match')
-            return redirect('/signup/')
+            return redirect('user_signup')
         
         # Create a new user
         user = User.objects.create_user(
@@ -129,7 +122,7 @@ def user_signup(request):
             password=password,
         )
 
-        login(request, user)
+        # login(request, user)
         messages.success(request, 'Account created successfully')
         return redirect('user_login') 
     
@@ -138,25 +131,21 @@ def user_signup(request):
 
 
 def user_login(request):
-
     if request.user.is_authenticated:
         return redirect('/')
     if request.method == 'POST':
-        email = request.POST.get('Email')
-        password = request.POST.get('Password')
+        email = request.POST['Email']
+        password = request.POST['Password']
         user = authenticate(request, username=email, password=password)
-        if user is not None:
+        
+        if user is not None and not user.is_superuser:
             login(request, user)
-            messages.success(request, 'Logged in successfully')
-            return redirect('/') 
+            messages.success(request, 'Login successful.')
+            return redirect('/')
         else:
-            messages.error(request, 'Invalid email or password')
-            return redirect('user_login')
+            messages.error(request, 'Invalid login credentials.')
 
     return render(request, 'auth/user_login.html')
-
-
-
 
 @login_required(login_url='user_login/')
 def user_logout(request):
