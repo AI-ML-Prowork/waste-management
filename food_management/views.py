@@ -7,8 +7,10 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 import os
-import io
 import base64
+import barcode
+from barcode.writer import ImageWriter
+from io import BytesIO
 
 
 
@@ -16,9 +18,7 @@ import base64
 def base(request):
     return render(request, 'base.html')
 
-import barcode
-from barcode.writer import ImageWriter
-from io import BytesIO
+
 
 @login_required(login_url='user_login/')
 def add_food_item(request):
@@ -34,14 +34,10 @@ def add_food_item(request):
             food_item.added_by = request.user
             food_item.category = category
             food_item.save()
-
-            # Generate the barcode
             barcode_data = f"{food_item.name} {food_item.category} {food_item.expiry_date}"
             barcode_image = generate_barcode_image(barcode_data)
 
-            # Pass the barcode image data to the template
-            return render(request, 'food_management/add_food_item.html', {'form': form, 'barcode_image': barcode_image})
-        
+            return render(request, 'food_management/add_food_item.html', {'form': form, 'barcode_image': barcode_image})       
             
     else:
         form = FoodItemForm()
