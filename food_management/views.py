@@ -6,20 +6,10 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
-import os
-import io
-import base64
-import barcode
+import os,io,base64,barcode
 from barcode.writer import ImageWriter
-from io import BytesIO
 from django.utils import timezone
-
-
-
-@login_required(login_url='user_login/')
-def base(request):
-    return render(request, 'base.html')
-
+from io import BytesIO
 
 
 @login_required(login_url='user_login/')
@@ -198,4 +188,8 @@ def user_logout(request):
     messages.success(request, 'Logged out successfully')
     return redirect('user_login')
 
+
+@login_required(login_url='user_login/')
+def base(request):
+    return render(request, 'base.html')
 

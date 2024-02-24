@@ -3,3 +3,4 @@ barcode_generator
 barcode
 django-material-admin
 python-barcode
+psycopg2

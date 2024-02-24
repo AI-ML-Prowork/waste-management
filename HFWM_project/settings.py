@@ -68,7 +68,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [STATIC_DIR]
 
 
-STATIC_ROOT = BASE_DIR/ "staticfiles_build"/ "static/"
+STATIC_ROOT = BASE_DIR /"staticfiles_build"/"static/"
 
 
 MEDIA_URL= 'images/'
