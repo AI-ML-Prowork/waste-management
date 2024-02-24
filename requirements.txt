@@ -3,4 +3,4 @@ Django
 barcode
 io
 base64
-
+django-material-admin
