@@ -27,14 +27,15 @@ SECRET_KEY = "django-insecure--_)zkx*)r%-pyrd@c-*(-z7p7boap&-9035z4fhui$cb**p7!s
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.vercel.app','*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
     "food_management",
-    "django.contrib.admin",
+    'material',
+    'material.admin',
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
