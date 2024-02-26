@@ -1,5 +1,5 @@
 from django import forms
-from .models import FoodItem, FoodCategory
+from .models import FoodItem, FoodCategory,FoodBank
 
 class FoodItemForm(forms.ModelForm):
     
@@ -24,3 +24,12 @@ class NewCategoryForm(forms.ModelForm):
     class Meta:
         model = FoodCategory
         fields = ['name', 'pre_expiry_days']
+
+
+class FoodBankForm(forms.ModelForm):
+
+    
+    class Meta:
+        model = FoodBank
+        fields = ['Food_bank_name', 'location']
+

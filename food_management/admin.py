@@ -14,3 +14,9 @@ class FoodItemAdmin(admin.ModelAdmin):
 
 admin.site.register(FoodItem, FoodItemAdmin)
 
+from food_management.models import FoodBank
+
+class FoodBankAdmin(admin.ModelAdmin):
+    list_display = ['Food_bank_name', 'location']
+
+admin.site.register(FoodBank, FoodBankAdmin)
