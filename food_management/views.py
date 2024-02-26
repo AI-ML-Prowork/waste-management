@@ -133,6 +133,29 @@ def delete_category(request, pk):
      return render(request, 'food_management/delete_category_confirm.html', {'category': category})
 
 
+from .forms import FoodBankForm
+from .models import FoodBank
+
+@login_required(login_url='user_login/')
+def add_food_bank(request):
+    if request.method == 'POST':
+        form = FoodBankForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('add_food_bank')
+    else:
+        form = FoodBankForm()
+    return render(request, 'food_management/add_food_bank.html', {'form': form})
+
+
+def food_bank_list(request):
+    Food_bank_name = FoodBank.objects.all()
+    location = FoodBank.objects.all()
+
+    return render(request, 'food_management/food_bank_list.html', {'Food_bank_name': Food_bank_name, 'location': location})
+
+
+
 
 def user_signup(request):
     if request.user.is_authenticated:

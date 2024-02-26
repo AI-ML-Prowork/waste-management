@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Food Bank List{% endblock %}
+
+{% block content %}
+    <h1>Food Bank List</h1>
+    <ul>
+        {% for foodbank in foodbanks %}
+            <li>
+                {{ foodbank.Food_bank_name  }}
+                {{foodbank.location}}
+               
+            </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
