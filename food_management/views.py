@@ -149,10 +149,8 @@ def add_food_bank(request):
 
 
 def food_bank_list(request):
-    Food_bank_name = FoodBank.objects.all()
-    location = FoodBank.objects.all()
-
-    return render(request, 'food_management/food_bank_list.html', {'Food_bank_name': Food_bank_name, 'location': location})
+    food_banks = FoodBank.objects.all()
+    return render(request, 'food_management/food_bank_list.html', {'food_banks': food_banks})
 
 
 

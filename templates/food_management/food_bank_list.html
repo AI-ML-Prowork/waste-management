@@ -4,10 +4,12 @@
 {% block content %}
     <h1>Food Bank List</h1>
     <ul>
-        {% for foodbank in foodbanks %}
+        <p>Didn't find Local Food bank? <a href="{% url 'add_food_bank' %}">Click to Add</a></p>
+        {% for food_bank in food_banks %}
             <li>
-                {{ foodbank.Food_bank_name  }}
-                {{foodbank.location}}
+                {{ food_bank.Food_bank_name }}
+                {{food_bank.location}}
+
                
             </li>
         {% endfor %}
