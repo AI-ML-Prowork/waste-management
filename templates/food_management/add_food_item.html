@@ -3,46 +3,61 @@
 
 {% block content %}
 
-    <h1>Add Food Item</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Submit</button>
-    </form>
+<h1>Add Food Item</h1>
 
-    
-    <p>Didn't find your category? <a href="{% url 'add_category' %}">Click to Add</a></p>
-    <p>Want to delete your category? <a href="{% url 'category_list' %}">Click to Delete</a></p>
+<!-- Form for adding food item -->
+<form id="foodItemForm" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+</form> 
 
-    {% if barcode_image %}
-        <!-- Display the barcode image using base64 data -->
-        <img id="barcodeImage" src="data:image/png;base64,{{ barcode_image }}" alt="Barcode Image">
-        <!-- Hidden details -->
-        <div id="barcodeDetails" style="display: none;">
-            {% for key, value in food_item_details.items %}
-                <p>{{ key }}: {{ value }}</p>
-            {% endfor %}
-        </div>
-        <!-- Download button -->
-        <button id="downloadBarcodeBtn">Download Barcode</button>
-    {% endif %}
+<!-- Link to add a new category -->
+<p>Didn't find your category? <a href="{% url 'add_category' %}">Click to Add</a></p>
+<!-- Link to delete categories -->
+<p>Want to delete your category? <a href="{% url 'category_list' %}">Click to Delete</a></p>
 
+<!-- Barcode scanning section -->
+<h2>Barcode Scanner</h2>
+<button id="scanButton">Scan Barcode</button>
 
-    <script>
-        // Function to trigger the download of the barcode image
-        document.getElementById('downloadBarcodeBtn').addEventListener('click', function() {
-            var barcodeImage = document.getElementById('barcodeImage');
-            var link = document.createElement('a');
-            link.href = barcodeImage.src;
-            link.download = 'barcode.png';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        });
-    </script>
-    <style>
-        #barcodeDetails {
-            display: none;
+<!-- Script for barcode scanning -->
+<script src="https://cdn.jsdelivr.net/npm/quagga/dist/quagga.min.js"></script>
+<script>
+    // Initialize QuaggaJS
+    Quagga.init({
+        inputStream: {
+            name: "Live",
+            type: "LiveStream",
+            target: document.querySelector('#foodItemForm')
+        },
+        decoder: {
+            readers: ['ean_reader']
         }
-    </style>
+    }, function(err) {
+        if (err) {
+            console.error('Failed to initialize Quagga:', err);
+            return;
+        }
+        console.log('Quagga initialized successfully.');
+        Quagga.start();
+    });
+
+    // Handle barcode scanning results
+    Quagga.onDetected(function(result) {
+        var barcode = result.codeResult.code;
+        console.log('Barcode detected:', barcode);
+        // Here, you can perform actions with the scanned barcode, such as populating form fields
+        // For simplicity, let's just display an alert with the scanned barcode
+        alert('Scanned Barcode: ' + barcode);
+    });
+
+    // Stop Quagga when leaving the page
+    window.addEventListener('beforeunload', function() {
+        Quagga.stop();
+    });
+</script>
+
+</div>
+
 {% endblock %}

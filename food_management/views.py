@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 import os,io,base64,barcode
+import barcode
 from barcode.writer import ImageWriter
 from django.utils import timezone
 from io import BytesIO
