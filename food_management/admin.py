@@ -20,3 +20,11 @@ class FoodBankAdmin(admin.ModelAdmin):
     list_display = ['Food_bank_name', 'location']
 
 admin.site.register(FoodBank, FoodBankAdmin)
+
+
+from food_management.models import BarcodeFoodItem
+
+class BarcodeFoodItemAdmin(admin.ModelAdmin):
+    list_display = ['name', 'expiry_date']
+
+admin.site.register(BarcodeFoodItem, BarcodeFoodItemAdmin)

@@ -48,3 +48,12 @@ class FoodBank(models.Model):
 
     def __str__(self):
         return self.name
+    
+
+class BarcodeFoodItem(models.Model):
+    name = models.CharField(max_length=100)
+    expiry_date = models.DateField()
+    barcode_image = models.ImageField(upload_to='barcode_images/')
+
+    def __str__(self):
+        return self.name

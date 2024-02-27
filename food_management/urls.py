@@ -17,6 +17,9 @@ urlpatterns = [
     path('add_food_bank/', add_food_bank, name='add_food_bank'),
     path('food_bank_list/', food_bank_list, name='food_bank_list'),
 
+
+    path('generate_barcode/', generate_barcode, name='generate_barcode'),
+
     path('user_login/', user_login, name='user_login'),
     path('user_signup/', user_signup, name='user_signup'),
     path('user_logout/', user_logout, name="user_logout"),

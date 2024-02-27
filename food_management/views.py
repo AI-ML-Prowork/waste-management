@@ -8,6 +8,13 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from django.utils import timezone
 
+from barcode.codex import Code128 
+from barcode.writer import ImageWriter
+import io
+from django.core.files.uploadedfile import InMemoryUploadedFile
+from .models import BarcodeFoodItem
+from django.http import HttpResponse
+
 
 
 @login_required(login_url='user_login/')
@@ -194,7 +201,47 @@ def user_logout(request):
     return redirect('user_login')
 
 
+
 @login_required(login_url='user_login/')
 def base(request):
     return render(request, 'base.html')
+
+
+
+from django.core.exceptions import ValidationError
+from django.core.files.base import ContentFile
+
+
+def generate_barcode_image(content):
+    try:
+        buffer = io.BytesIO()
+        code = Code128(content, writer=ImageWriter())
+        code.save(buffer)
+
+        # Create a ContentFile with a proper filename
+        filename = f'{content}.png'
+        barcode_image = ContentFile(buffer.getvalue(), name=filename)
+
+        return barcode_image
+    except Exception as e:
+        print(f"Error generating barcode image: {e}")
+        raise ValidationError("Error generating barcode image.")
+
+
+@login_required(login_url='user_login/')
+def generate_barcode(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        expiry_date = request.POST['expiry_date']
+        
+        food_item = BarcodeFoodItem.objects.create(name=name, expiry_date=expiry_date)
+        barcode_image = generate_barcode_image(f'{food_item.id}-{food_item.name}')
+        food_item.barcode_image.save(f'{food_item.id}.png', barcode_image)
+
+        return HttpResponse('Barcode successfully generated!')
+
+    return render(request, 'food_management/generate_barcode.html')
+
+
+
 
