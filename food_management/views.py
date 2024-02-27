@@ -6,11 +6,8 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
-import os,io,base64,barcode
-import barcode
-from barcode.writer import ImageWriter
 from django.utils import timezone
-from io import BytesIO
+
 
 
 @login_required(login_url='user_login/')
@@ -51,25 +48,11 @@ def add_food_item(request):
             food_item.added_by = request.user
             food_item.category = category
             food_item.save()
-            barcode_data = f"{food_item.name} {food_item.category} {food_item.expiry_date}"
-            barcode_image = generate_barcode_image(barcode_data)
-            return render(request, 'food_management/add_food_item.html', {'form': form, 'barcode_image': barcode_image})                   
+            return render(request, 'food_management/add_food_item.html', {'form': form})                   
     else:
         form = FoodItemForm()
     return render(request, 'food_management/add_food_item.html', {'form': form})
 
-from django.conf import settings
-from django.contrib.staticfiles.storage import staticfiles_storage
-from django.core.files.base import ContentFile
-
-def generate_barcode_image(barcode_data):
-    code128 = barcode.get_barcode_class('code128')
-    code = code128(barcode_data, writer=ImageWriter())
-    buffer = io.BytesIO()
-    code.write(buffer)
-    image_data = buffer.getvalue()
-    base64_image = base64.b64encode(image_data)
-    return base64_image.decode('utf-8')
 
 @login_required(login_url='user_login/')
 def food_item_list(request):
